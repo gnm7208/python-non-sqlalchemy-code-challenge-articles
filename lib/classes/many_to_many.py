@@ -20,8 +20,10 @@ class Article:
     @title.setter
     def title(self, value):
         # Validate title: must be str and between 5-50 characters
-        if not isinstance(value, str) or not (5 <= len(value) <= 50):
-            return
+        if not isinstance(value, str):
+            raise Exception("Title must be of type str")
+        if not (5 <= len(value) <= 50):
+            raise Exception("Title must be between 5 and 50 characters")
         self._title = value
     
     @property
@@ -48,6 +50,9 @@ class Article:
             return
         self._magazine = value
 
+    def __repr__(self):
+        return f"Article(title={self.title!r}, author={getattr(self.author, 'name', None)!r}, magazine={getattr(self.magazine, 'name', None)!r})"
+
 class Author:
     def __init__(self, name):
         # Use private attribute with property to make name immutable
@@ -62,11 +67,13 @@ class Author:
     @name.setter
     def name(self, value):
         # Validate name: must be str and length > 0
-        # Prevent reassignment after initial creation using hasattr
+        # Prevent reassignment after initial creation
         if hasattr(self, '_name') and self._name is not None:
-            return
-        if not isinstance(value, str) or len(value) == 0:
-            return
+            raise Exception("Name cannot be changed after author is instantiated")
+        if not isinstance(value, str):
+            raise Exception("Name must be of type str")
+        if len(value) == 0:
+            raise Exception("Name must be longer than 0 characters")
         self._name = value
 
     def articles(self):
@@ -93,6 +100,9 @@ class Author:
         # Return unique categories as a list
         return list(set(categories))
 
+    def __repr__(self):
+        return f"Author({self.name!r})"
+
 class Magazine:
     # Track all magazines created for potential future use
     all = []
@@ -111,8 +121,10 @@ class Magazine:
     @name.setter
     def name(self, value):
         # Validate name: must be str and between 2-16 characters
-        if not isinstance(value, str) or not (2 <= len(value) <= 16):
-            return
+        if not isinstance(value, str):
+            raise Exception("Magazine name must be of type str")
+        if not (2 <= len(value) <= 16):
+            raise Exception("Magazine name must be between 2 and 16 characters")
         self._name = value
     
     @property
@@ -123,8 +135,10 @@ class Magazine:
     @category.setter
     def category(self, value):
         # Validate category: must be str and length > 0
-        if not isinstance(value, str) or len(value) == 0:
-            return
+        if not isinstance(value, str):
+            raise Exception("Magazine category must be of type str")
+        if len(value) == 0:
+            raise Exception("Magazine category must be longer than 0 characters")
         self._category = value
 
     def articles(self):
@@ -171,3 +185,6 @@ class Magazine:
         
         # Return the magazine with the most articles
         return max(magazine_counts, key=magazine_counts.get)
+
+    def __repr__(self):
+        return f"Magazine(name={self.name!r}, category={self.category!r})"
