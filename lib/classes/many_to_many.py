@@ -23,7 +23,31 @@ class Article:
         if not isinstance(value, str) or not (5 <= len(value) <= 50):
             return
         self._title = value
-        
+    
+    @property
+    def author(self):
+        """Returns the author object for this article"""
+        return self._author
+    
+    @author.setter
+    def author(self, value):
+        # Author must be of type Author and is mutable
+        if not isinstance(value, Author):
+            return
+        self._author = value
+    
+    @property
+    def magazine(self):
+        """Returns the magazine object for this article"""
+        return self._magazine
+    
+    @magazine.setter
+    def magazine(self, value):
+        # Magazine must be of type Magazine and is mutable
+        if not isinstance(value, Magazine):
+            return
+        self._magazine = value
+
 class Author:
     def __init__(self, name):
         # Use private attribute with property to make name immutable
@@ -46,10 +70,14 @@ class Author:
         self._name = value
 
     def articles(self):
-        pass
+        # Return a list of all articles written by this author
+        return [article for article in Article.all if article.author == self]
 
     def magazines(self):
-        pass
+        # Return a unique list of magazines the author has contributed to
+        magazines = [article.magazine for article in self.articles()]
+        # Remove duplicates while preserving list type
+        return list(set(magazines))
 
     def add_article(self, magazine, title):
         pass
@@ -92,10 +120,14 @@ class Magazine:
         self._category = value
 
     def articles(self):
-        pass
+        # Return a list of all articles published by this magazine
+        return [article for article in Article.all if article.magazine == self]
 
     def contributors(self):
-        pass
+        # Return a unique list of authors who have written for this magazine
+        authors = [article.author for article in self.articles()]
+        # Remove duplicates while preserving list type
+        return list(set(authors))
 
     def article_titles(self):
         pass
