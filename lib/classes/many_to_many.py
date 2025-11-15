@@ -80,10 +80,18 @@ class Author:
         return list(set(magazines))
 
     def add_article(self, magazine, title):
-        pass
+        # Create and return a new Article instance associated with this author
+        new_article = Article(self, magazine, title)
+        return new_article
 
     def topic_areas(self):
-        pass
+        # Return unique list of magazine categories the author has contributed to
+        if not self.articles():
+            return None
+        # Extract categories from all magazines the author wrote for
+        categories = [magazine.category for magazine in self.magazines()]
+        # Return unique categories as a list
+        return list(set(categories))
 
 class Magazine:
     # Track all magazines created for potential future use
@@ -130,7 +138,20 @@ class Magazine:
         return list(set(authors))
 
     def article_titles(self):
-        pass
+        # Return a list of the titles strings of all articles written for that magazine
+        if not self.articles():
+            return None
+        # Extract title from each article
+        return [article.title for article in self.articles()]
 
     def contributing_authors(self):
-        pass
+        # Return a list of authors who have written more than 2 articles for the magazine
+        # Count articles per author for this magazine
+        author_counts = {}
+        for article in self.articles():
+            author = article.author
+            author_counts[author] = author_counts.get(author, 0) + 1
+        
+        # Return authors with more than 2 articles
+        contributing = [author for author, count in author_counts.items() if count > 2]
+        return contributing if contributing else None
