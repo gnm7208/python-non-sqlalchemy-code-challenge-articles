@@ -155,3 +155,19 @@ class Magazine:
         # Return authors with more than 2 articles
         contributing = [author for author, count in author_counts.items() if count > 2]
         return contributing if contributing else None
+    
+    @classmethod
+    def top_publisher(cls):
+        # Returns the Magazine instance with the most articles
+        # If there are no articles, returns None
+        if not Article.all:
+            return None
+        
+        # Count articles per magazine
+        magazine_counts = {}
+        for article in Article.all:
+            magazine = article.magazine
+            magazine_counts[magazine] = magazine_counts.get(magazine, 0) + 1
+        
+        # Return the magazine with the most articles
+        return max(magazine_counts, key=magazine_counts.get)
