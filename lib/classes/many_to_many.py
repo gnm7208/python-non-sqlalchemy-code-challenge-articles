@@ -35,7 +35,7 @@ class Article:
     def author(self, value):
         # Author must be of type Author and is mutable
         if not isinstance(value, Author):
-            return
+            raise Exception("Author must be of type Author")
         self._author = value
     
     @property
@@ -47,7 +47,7 @@ class Article:
     def magazine(self, value):
         # Magazine must be of type Magazine and is mutable
         if not isinstance(value, Magazine):
-            return
+            raise Exception("Magazine must be of type Magazine")
         self._magazine = value
 
     def __repr__(self):
